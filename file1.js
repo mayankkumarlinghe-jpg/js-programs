@@ -219,7 +219,6 @@ values.forEach(val => {
 // Section 9: Practical Real-World Examples
 console.log("\n=== 9. Practical Examples ===");
 
-// Example 1: BMI Calculator
 let weight = 70; // kg
 let height = 1.75; // meters
 let bmi = weight / (height * height);
@@ -235,7 +234,6 @@ if (bmi < 18.5) {
   console.log("Obese");
 }
 
-// Example 2: Simple Login System
 function login(user, pass) {
   return (user === "admin" && pass === "12345") ? "Access Granted" :
          (user === "guest" && pass === "") ? "Guest Access" :
@@ -245,7 +243,7 @@ console.log(login("admin", "12345"));
 console.log(login("guest", ""));
 console.log(login("hacker", "pass"));
 
-// Example 3: Traffic Light System
+
 let light = "green";
 switch (light) {
   case "green": console.log("Go!"); break;
@@ -253,3 +251,238 @@ switch (light) {
   case "red": console.log("Stop!"); break;
   default: console.log("Invalid light");
 }
+
+// This program focuses exclusively on Arrow Functions (=>)
+
+// Section 1: Basic Syntax Variations
+console.log("=== 1. Arrow Function Syntax Variations ===");
+
+// 1.1 With parameters and block body
+const greet = (name) => {
+  console.log(`Hello, ${name}!`);
+};
+greet("Alice");
+
+// 1.2 Single parameter - parentheses optional
+const upperCase = str => {
+  return str.toUpperCase();
+};
+console.log("javascript ->", upperCase("javascript"));
+
+// 1.3 No parameters - must use empty parentheses
+const sayHi = () => {
+  console.log("Hi from arrow function!");
+};
+sayHi();
+
+// 1.4 Multiple parameters
+const add = (a, b) => {
+  return a + b;
+};
+console.log("15 + 25 =", add(15, 25));
+
+// Section 2: Concise Body & Implicit Return
+console.log("\n=== 2. Concise Body (Implicit Return) ===");
+
+// When body is a single expression, {} and return are optional
+const multiply = (x, y) => x * y;
+console.log("8 * 7 =", multiply(8, 7));
+
+const square = num => num * num;
+console.log("Square of 9:", square(9));
+
+const getMessage = name => `Welcome back, ${name}!`;
+console.log(getMessage("Bob"));
+
+const isEven = n => n % 2 === 0;
+console.log("10 is even?", isEven(10));
+console.log("7 is even?", isEven(7));
+
+// Returning object literal - wrap in parentheses
+const createPerson = (name, age) => ({ name: name, age: age });
+console.log("Created person:", createPerson("Charlie", 30));
+
+// Section 3: Arrow Functions vs Regular Functions - Key Differences
+console.log("\n=== 3. this Binding Behavior ===");
+
+// Regular function: 'this' depends on how function is called
+const regularObj = {
+  name: "Regular",
+  sayName: function() {
+    console.log("Regular this.name:", this.name);
+    const inner = function() {
+      console.log("Inner this.name:", this.name); // undefined (this lost)
+    };
+    inner();
+  }
+};
+regularObj.sayName();
+
+// Arrow function: 'this' is lexically bound (inherits from outer scope)
+const arrowObj = {
+  name: "Arrow",
+  sayName: () => {
+    console.log("Arrow this.name:", this.name); // undefined (this is global/window)
+  },
+  sayNameCorrect: function() {
+    console.log("Correct this.name:", this.name);
+    const innerArrow = () => {
+      console.log("Inner arrow this.name:", this.name); // inherits from sayNameCorrect
+    };
+    innerArrow();
+  }
+};
+arrowObj.sayName();           // undefined
+arrowObj.sayNameCorrect();    // Works correctly
+
+// Practical use: in callbacks where we want to preserve 'this'
+const counter = {
+  count: 0,
+  increment: function() {
+    setTimeout(() => {
+      this.count++;
+      console.log("Count (arrow):", this.count);
+    }, 1000);
+  },
+  incrementWrong: function() {
+    setTimeout(function() {
+      this.count++; // 'this' is not counter here
+      console.log("Count (regular):", this.count); // NaN or error
+    }, 1000);
+  }
+};
+// counter.increment();      // Uncomment to see working example
+// counter.incrementWrong(); // Would not work as expected
+
+// Section 4: Arrow Functions in Array Methods
+console.log("\n=== 4. Arrow Functions with Array Methods ===");
+
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// map
+const doubled = numbers.map(num => num * 2);
+console.log("Doubled:", doubled);
+
+// filter
+const evens = numbers.filter(n => n % 2 === 0);
+console.log("Even numbers:", evens);
+
+// reduce
+const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+console.log("Sum of array:", sum);
+
+// forEach
+console.log("Printing with forEach:");
+numbers.forEach(n => console.log(`Number: ${n}`));
+
+// sort (descending)
+const sortedDesc = [...numbers].sort((a, b) => b - a);
+console.log("Sorted descending:", sortedDesc);
+
+// Section 5: Limitations of Arrow Functions
+console.log("\n=== 5. Limitations ===");
+
+// 5.1 No 'arguments' object
+const regularArgs = function() {
+  console.log("Regular arguments:", arguments);
+};
+regularArgs(1, 2, 3);
+
+const arrowArgs = () => {
+  // console.log("Arrow arguments:", arguments); // ReferenceError
+};
+// arrowArgs(1, 2, 3);
+
+// Use rest parameters instead
+const arrowWithRest = (...args) => {
+  console.log("Arrow with rest args:", args);
+};
+arrowWithRest("a", "b", "c");
+
+// 5.2 Cannot be used as constructors
+// const BadConstructor = () => {};
+// new BadConstructor(); // TypeError
+
+// 5.3 Not hoisted (function expressions aren't either)
+greetArrow(); // ReferenceError
+const greetArrow = () => console.log("Hello from arrow");
+
+// Section 6: Practical Real-World Examples
+console.log("\n=== 6. Practical Arrow Function Examples ===");
+
+// Example 1: Simple calculator object
+const calc = {
+  add: (a, b) => a + b,
+  subtract: (a, b) => a - b,
+  multiply: (a, b) => a * b,
+  divide: (a, b) => (b !== 0 ? a / b : "Error")
+};
+
+console.log("Calculator results:");
+console.log("10 + 5 =", calc.add(10, 5));
+console.log("20 - 8 =", calc.subtract(20, 8));
+console.log("6 * 7 =", calc.multiply(6, 7));
+console.log("15 / 3 =", calc.divide(15, 3));
+
+// Example 2: Data transformation pipeline
+const users = [
+  { name: "alice", age: 25 },
+  { name: "bob", age: 17 },
+  { name: "charlie", age: 30 },
+  { name: "diana", age: 16 }
+];
+
+const adultUserNames = users
+  .filter(user => user.age >= 18)
+  .map(user => user.name.toUpperCase())
+  .sort((a, b) => a.localeCompare(b));
+
+console.log("Adult user names (uppercase, sorted):", adultUserNames);
+
+// Example 3: Event listener style (common in frontend)
+const buttonSim = {
+  clicks: 0,
+  handleClick: function() {
+    // Simulate adding event listener with arrow to preserve 'this'
+    const listener = () => {
+      this.clicks++;
+      console.log(`Button clicked ${this.clicks} times`);
+    };
+    // Simulate calling listener
+    listener();
+    listener();
+  }
+};
+buttonSim.handleClick();
+
+// Example 4: Higher-order function returning arrow
+const createMultiplier = factor => value => value * factor;
+
+const triple = createMultiplier(3);
+const quadruple = createMultiplier(4);
+
+console.log("Triple 5 =", triple(5));
+console.log("Quadruple 7 =", quadruple(7));
+
+// Example 5: Async arrow function (common with promises/fetch)
+const fetchDataSim = async () => {
+  console.log("Fetching data...");
+  // Simulate async work
+  return new Promise(resolve => {
+    setTimeout(() => resolve("Data received!"), 500);
+  });
+};
+// fetchDataSim().then(console.log); // Uncomment to see async behavior
+
+// Section 7: Best Practices Summary
+console.log("\n=== 7. Best Practices for Arrow Functions ===");
+console.log("Use arrow functions when:");
+console.log("  • You need lexical 'this' (callbacks, object methods)");
+console.log("  • Writing short, concise callbacks (map, filter, etc.)");
+console.log("  • Creating simple utility functions");
+console.log("Avoid arrow functions when:");
+console.log("  • You need 'arguments' object");
+console.log("  • Defining object methods that rely on dynamic 'this'");
+console.log("  • Creating constructors or generators");
+
+
